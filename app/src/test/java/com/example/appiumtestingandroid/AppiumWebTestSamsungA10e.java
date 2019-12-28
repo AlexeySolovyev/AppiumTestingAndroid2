@@ -1,5 +1,7 @@
 package com.example.appiumtestingandroid;
 
+import com.google.common.collect.ImmutableBiMap;
+
 import org.openqa.selenium.By;
 import org.openqa.selenium.remote.DesiredCapabilities;
 import org.testng.Assert;
@@ -14,7 +16,7 @@ import java.util.concurrent.TimeUnit;
 import io.appium.java_client.android.AndroidDriver;
 import io.appium.java_client.remote.MobileCapabilityType;
 
-public class AppiumWebTest {
+public class AppiumWebTestSamsungA10e {
 
     private static AndroidDriver driver;
 
@@ -23,13 +25,13 @@ public class AppiumWebTest {
         // Set the app
         DesiredCapabilities capabilities = new DesiredCapabilities();
         capabilities.setCapability(MobileCapabilityType.BROWSER_NAME, "Chrome");
-        capabilities.setCapability(MobileCapabilityType.VERSION, "8.1.0");
-        capabilities.setCapability(MobileCapabilityType.UDID, "emulator-5554");
+        capabilities.setCapability(MobileCapabilityType.VERSION, "9");
+        capabilities.setCapability(MobileCapabilityType.UDID, "RF8MB1CV9QH");
         capabilities.setCapability(MobileCapabilityType.NEW_COMMAND_TIMEOUT, "60");
-        capabilities.setCapability(MobileCapabilityType.DEVICE_NAME, "Android SDK built for x86");
+        capabilities.setCapability(MobileCapabilityType.DEVICE_NAME, "Samsung A10e");
         capabilities.setCapability(MobileCapabilityType.PLATFORM_NAME, "ANDROID");
-        driver = new AndroidDriver(new URL("http://127.0.0.1:4723/wd/hub"), capabilities);
-
+        capabilities.setCapability("appium:chromeOptions", ImmutableBiMap.of("w3c", false)); //this option disable w3c mode for chromedriver
+        driver = new AndroidDriver<>(new URL("http://127.0.0.1:4723/wd/hub"), capabilities);
     }
 
     @AfterMethod
@@ -38,7 +40,7 @@ public class AppiumWebTest {
         driver.resetApp();
     }
 
-    @Test(priority = 0, enabled = true)
+    @Test(enabled = false, priority = 0)
     public void loginOnMainPage() {
         driver.get("https://m.facebook.com");
         Assert.assertTrue(driver.getCurrentUrl().contains("facebook.com"), "URL doesn't match");
@@ -47,13 +49,16 @@ public class AppiumWebTest {
         driver.findElement(By.name("login")).click();
         }
 
-    @Test(priority = 1, enabled = true)
+    @Test(enabled = true, priority = 1)
     public void createNewAccount() {
         driver.get("https://m.facebook.com");
         driver.findElement(By.id("signup-button")).click();
+        driver.findElement(By.id("firstname_input")).sendKeys("testFirstName");
+        driver.findElement(By.id("lastname_input")).sendKeys("testLastName");
+        driver.findElement(By.id("login_link")).click();
         }
 
-    @Test(priority = 2)
+    @Test(enabled = false, priority = 2)
     public void pressOnHelpButton(){
         driver.get("https://m.facebook.com");
         driver.findElement(By.xpath("//*[@id=\"help-link\"]")).click();
